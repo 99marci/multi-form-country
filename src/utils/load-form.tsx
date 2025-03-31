@@ -1,4 +1,3 @@
-// src/utils/loadForms.tsx
 import { ReactElement } from "react";
 import { Path, UseFormRegister, FieldErrors } from "react-hook-form";
 import CountrySelector from "@/components/country-selector.component";
@@ -37,6 +36,7 @@ export const loadForms = <T extends CountryCode>({
           key={step.field}
           type={step.type || "text"}
           placeholder={step.placeHolder || ""}
+          control={control}
           name={step.name as Path<SupportedForms[typeof country]>}
           register={step.register}
           errors={errors}

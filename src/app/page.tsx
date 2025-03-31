@@ -7,7 +7,7 @@ import { Progress } from "@/shad-components/ui/progress";
 import { Button } from "@/shad-components/ui/button";
 
 import { useCountryFormState } from "@/utils/store/formStore";
-import { loadForms } from "@/utils/loadForm";
+import { loadForms } from "@/utils/load-form";
 import { useCountryStore } from "@/utils/store/countryStore";
 
 export default function Home() {
@@ -70,6 +70,7 @@ export default function Home() {
         setZero();
       } else {
         updateFormState(formValues);
+        console.log(formValues, 'values')
         next();
       }
     }
