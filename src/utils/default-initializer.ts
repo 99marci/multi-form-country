@@ -4,35 +4,35 @@ import {
   FormDataIndia,
   FormDataUAE,
   FormDataUSA,
-  Forms,
+  SupportedForms,
 } from "./type";
 
-export const defaultInit: Forms = {
-  FormDataUSA: {
+export const defaultInit: SupportedForms = {
+  USA: {
     socialSecurityNumber: "",
     state: "",
     zipCode: "",
     image: undefined,
   } as FormDataUSA,
-  FormDataGermany: {
+  Germany: {
     taxID: "",
     bundesland: "",
     postalCode: "",
     image: undefined,
   } as FormDataGermany,
-  FormDataIndia: {
+  India: {
     aadhaarNumber: "",
     state: "",
-    PINCode: "",
+    pinCode: "",
     image: undefined,
   } as FormDataIndia,
-  FormDataUAE: {
+  UAE: {
     emiratesID: "",
     visaType: "",
     city: "",
     image: undefined,
   } as FormDataUAE,
-  FormDataCanada: {
+  Canada: {
     SIN: "",
     province: "",
     postalCode: "",

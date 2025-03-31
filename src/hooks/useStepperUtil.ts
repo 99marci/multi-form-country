@@ -4,7 +4,7 @@ import { useStepperStore } from "@/utils/store/stepperStore";
 import { ReactElement } from "react";
 
 export function useStepperUtil(steps: ReactElement[]) {
-  const { currentStep, increment, decrement } = useStepperStore();
+  const { currentStep, increment, decrement, setZero } = useStepperStore();
 
   const next = (): void => {
     if (currentStep < steps.length - 1 && steps.length !== 1) {
@@ -12,7 +12,7 @@ export function useStepperUtil(steps: ReactElement[]) {
     }
   };
 
-  const back = () => {
+  const back = (): void => {
     if (currentStep > 0) {
       decrement();
     }
@@ -33,5 +33,6 @@ export function useStepperUtil(steps: ReactElement[]) {
     progress,
     next,
     back,
+    setZero
   };
 }

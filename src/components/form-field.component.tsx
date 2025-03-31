@@ -1,35 +1,56 @@
 "use client";
 import { Input } from "@/shad-components/ui/input";
-import { ChangeEvent } from "react";
-import { FieldValues, Path, UseFormRegister } from "react-hook-form";
+import {
+  FieldErrors,
+  FieldValues,
+  Path,
+  UseFormRegister,
+} from "react-hook-form";
 import FormWrapper from "./form-wrapper";
+import { fileValidator } from "@/utils/methods";
 
 type Props<T extends FieldValues> = {
   type: string;
   placeholder: string;
   name: Path<T>;
   register: UseFormRegister<T>;
-  onChange?: (event: ChangeEvent) => void;
-  errorMessage?: string;
+  errors: FieldErrors;
 };
 
 const FormField = <T extends FieldValues>(props: Props<T>) => {
+  let errorMessage = "";
+  if (props.errors && props.errors[props.name]) {
+    errorMessage = props.errors[props.name]?.message?.toString() || "";
+  }
+
   return (
     <FormWrapper>
-      <Input
-        autoFocus
-        type={props.type}
-        placeholder={props.placeholder}
-        accept={props.type === "file" ? "image/*" : undefined}
-        {...props.register(props.name, {
-          required: "Please do not leave it blank!",
-        })}
-        onChange={props.onChange}
-      />
+      {props.type === "file" ? (
+        <>
+          <Input
+            autoFocus
+            type={"file"}
+            accept="image/*"
+            {...props.register(props.name, {
+              required: "Please do not leave the field blank!",
+            })}
+            onChange={fileValidator}
+          />
+        </>
+      ) : (
+        <Input
+          autoFocus
+          type={"text"}
+          placeholder={props.placeholder}
+          {...props.register(props.name, {
+            required: "Please do not leave the field blank!",
+          })}
+        />
+      )}
 
-      {props.errorMessage && (
+      {errorMessage && (
         <span className="error-message text-xs text-red-700">
-          {props.errorMessage}
+          {errorMessage}
         </span>
       )}
     </FormWrapper>

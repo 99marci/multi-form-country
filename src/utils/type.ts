@@ -1,54 +1,47 @@
-export type FormDataUSA = {
+export interface FormDataUSA {
   socialSecurityNumber: string;
   state: string;
   zipCode: string;
   image: FileList | undefined;
-};
+}
 
-export type FormDataUAE = {
+export interface FormDataUAE {
   emiratesID: string;
   visaType: string;
   city: string;
   image: FileList | undefined;
-};
+}
 
-export type FormDataGermany = {
+export interface FormDataGermany {
   taxID: string;
   bundesland: string;
   postalCode: string;
   image: FileList | undefined;
-};
+}
 
-export type FormDataIndia = {
+export interface FormDataIndia {
   aadhaarNumber: string;
   state: string;
-  PINCode: string;
+  pinCode: string;
   image: FileList | undefined;
-};
+}
 
-export type FormDataCanada = {
+export interface FormDataCanada {
   SIN: string;
   province: string;
   postalCode: string;
   image: FileList | undefined;
-};
-
-export interface Forms {
-  FormDataUSA: FormDataUSA;
-  FormDataIndia: FormDataIndia;
-  FormDataCanada: FormDataCanada;
-  FormDataGermany: FormDataGermany;
-  FormDataUAE: FormDataUAE;
 }
 
-export type supportedFormDataKeys = keyof Forms;
+export type SupportedForms = {
+  USA: FormDataUSA;
+  India: FormDataIndia;
+  Canada: FormDataCanada;
+  Germany: FormDataGermany;
+  UAE: FormDataUAE;
+};
 
-export type SupportedForms =
-  | FormDataUSA
-  | FormDataCanada
-  | FormDataGermany
-  | FormDataUAE
-  | FormDataIndia;
+export type CountryCode = keyof SupportedForms;
 
 export const fieldNamesUSA = {
   socialSecurityNumber: "socialSecurityNumber",

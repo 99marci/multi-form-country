@@ -6,7 +6,6 @@ import {
   fieldNamesUAE,
   fieldNamesUSA,
 } from "./type";
-import { fileValidator } from "./methods";
 
 type Props<T extends FieldValues> = {
   register: UseFormRegister<T>;
@@ -14,7 +13,7 @@ type Props<T extends FieldValues> = {
 };
 export const steps = <T extends FieldValues>(stepProps: Props<T>) => {
   return {
-    FormDataUSA: [
+    USA: [
       {
         field: "Social Security Number",
         placeHolder: "Your Social Security Number",
@@ -41,11 +40,10 @@ export const steps = <T extends FieldValues>(stepProps: Props<T>) => {
         field: "Image name",
         name: fieldNamesUSA.image,
         register: stepProps.register,
-        onChange: fileValidator,
         error: stepProps.errors?.image,
       },
     ],
-    FormDataUAE: [
+    UAE: [
       {
         field: "Emirates ID",
         placeHolder: "Your Emirates ID",
@@ -72,11 +70,10 @@ export const steps = <T extends FieldValues>(stepProps: Props<T>) => {
         type: "file",
         name: fieldNamesUAE.image,
         register: stepProps.register,
-        onChange: fileValidator,
         error: stepProps.errors?.image,
       },
     ],
-    FormDataGermany: [
+    Germany: [
       {
         field: "Tax ID",
         placeHolder: "Your Tax ID",
@@ -103,11 +100,10 @@ export const steps = <T extends FieldValues>(stepProps: Props<T>) => {
         type: "file",
         name: fieldNamesGermany.image,
         register: stepProps.register,
-        onChange: fileValidator,
         error: stepProps.errors?.image,
       },
     ],
-    FormDataIndia: [
+    India: [
       {
         field: "Aadhaar Number,",
         placeHolder: "Your Aadhaar Number",
@@ -134,11 +130,10 @@ export const steps = <T extends FieldValues>(stepProps: Props<T>) => {
         type: "file",
         name: fieldNamesIndia.image,
         register: stepProps.register,
-        onChange: fileValidator,
         error: stepProps.errors?.image,
       },
     ],
-    FormDataCanada: [
+    Canada: [
       {
         field: "SIN",
         placeHolder: "Your SIN",
@@ -165,7 +160,6 @@ export const steps = <T extends FieldValues>(stepProps: Props<T>) => {
         type: "file",
         name: fieldNamesCanada.image,
         register: stepProps.register,
-        onChange: fileValidator,
         error: stepProps.errors?.image,
       },
     ],

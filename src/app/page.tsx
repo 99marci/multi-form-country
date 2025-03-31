@@ -1,26 +1,18 @@
 "use client";
-import CountrySelector from "@/components/country-selector.component";
-import FormField from "@/components/form-field.component";
-import Preview from "@/components/preview.component";
 import { useStepperUtil } from "@/hooks/useStepperUtil";
-import { steps } from "@/utils/steps";
-import { FormDataUSA, SupportedForms } from "@/utils/type";
-import { ReactElement, useCallback, useEffect } from "react";
-import { Path, useForm } from "react-hook-form";
+import { SupportedForms } from "@/utils/type";
+import React, { useEffect, useMemo } from "react";
+import { useForm } from "react-hook-form";
 import { Progress } from "@/shad-components/ui/progress";
 import { Button } from "@/shad-components/ui/button";
 
-import { defaultInit } from "@/utils/default-initializer";
-import { createFormState } from "@/utils/store/formStore";
+import { useCountryFormState } from "@/utils/store/formStore";
+import { loadForms } from "@/utils/loadForm";
 import { useCountryStore } from "@/utils/store/countryStore";
 
 export default function Home() {
+  const { formData, updateFormState, resetFormState } = useCountryFormState();
   const { country } = useCountryStore();
-
-  const useFormStore = createFormState<SupportedForms | undefined>(
-    country && defaultInit[country]
-  );
-  const { formData, updateForm, resetForm } = useFormStore();
 
   const {
     handleSubmit,
@@ -28,62 +20,56 @@ export default function Home() {
     trigger,
     reset,
     watch,
+    control,
     formState: { errors },
-  } = useForm({
-    defaultValues: { ...formData },
+  } = useForm<SupportedForms[typeof country]>({
+    defaultValues: formData,
   });
 
-  const watchM = useCallback(() => {
-    return watch();
-  }, [watch]);
-
   useEffect(() => {
-    reset();
-  }, [country, reset]);
-
-  const loadForms = (): ReactElement[] => {
-    const elementArray: ReactElement[] = [];
-    elementArray.push(<CountrySelector resetHandler={resetForm} />); // First select country
-
-    // Then build up form based on selected country
-    if (country && steps({ errors: errors, register: register })[country]) {
-      steps({ errors: errors, register: register })[country].forEach((step) => {
-        elementArray.push(
-          <FormField
-            key={step.field}
-            type={step.type || "text"}
-            placeholder={step.placeHolder || ""}
-            name={step.name as Path<FormDataUSA>}
-            onChange={step.onChange}
-            register={step.register}
-            errorMessage={
-              step.error && step.error.message && step.error.message.toString()
-            }
-          />
-        );
-      });
+    if (country) {
+      reset(formData);
     }
+  }, [country]);
 
-    elementArray.push(<Preview key="jey" previousSteps={watchM()} />);
+  const loadFormElements = useMemo(() => {
+    return loadForms({
+      country,
+      errors,
+      control,
+      register,
+      resetFormState,
+    });
+  }, [country, errors, control, register, resetFormState]);
 
-    return elementArray;
-  };
+  const formValues = watch();
 
-  const { isFirst, isLast, step, progress, hasOneElement, next, back } =
-    useStepperUtil(loadForms());
+  const {
+    isFirst,
+    isLast,
+    step,
+    progress,
+    hasOneElement,
+    next,
+    back,
+    setZero,
+  } = useStepperUtil(loadFormElements);
 
-  const onSubmit = (data: Partial<FormDataUSA>) => {
+  const onSubmit = (data: Partial<SupportedForms[typeof country]>) => {
     alert(JSON.stringify(data));
-    resetForm();
+    resetFormState("USA"); //as this is default
+    reset();
   };
 
   const handleNext = async () => {
-    const isValid = await trigger();
-    if (isValid) {
+    const isFormValid = await trigger(undefined, { shouldFocus: true });
+
+    if (isFormValid && country) {
       if (isLast) {
         handleSubmit(onSubmit)();
+        setZero();
       } else {
-        updateForm(watchM());
+        updateFormState(formValues);
         next();
       }
     }

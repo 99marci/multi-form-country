@@ -7,18 +7,18 @@ import {
   SelectValue,
 } from "@/shad-components/ui/select";
 import FormWrapper from "./form-wrapper";
+import { CountryCode } from "@/utils/type";
+import { ReactElement } from "react";
 import { useCountryStore } from "@/utils/store/countryStore";
-import { supportedFormDataKeys } from "@/utils/type";
-
 type Props = {
-  resetHandler: () => void;
+  resetFormState: (country: CountryCode) => void;
 };
 
-export default function CountrySelector(props: Props) {
+export default function CountrySelector(props: Props):ReactElement {
   const { country, setCountry } = useCountryStore();
 
-  const valueChangeHandler = (value: supportedFormDataKeys) => {
-    props.resetHandler();
+  const valueChangeHandler = (value: CountryCode) => {
+    props.resetFormState(value);
     setCountry(value);
   };
 
@@ -29,11 +29,11 @@ export default function CountrySelector(props: Props) {
           <SelectValue placeholder="Select Country" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="FormDataUSA">USA</SelectItem>
-          <SelectItem value="FormDataUAE">UAE</SelectItem>
-          <SelectItem value="FormDataGermany">Germany</SelectItem>
-          <SelectItem value="FormDataIndia">India</SelectItem>
-          <SelectItem value="FormDataCanada">Canada</SelectItem>
+          <SelectItem value="USA">USA</SelectItem>
+          <SelectItem value="UAE">UAE</SelectItem>
+          <SelectItem value="Germany">Germany</SelectItem>
+          <SelectItem value="India">India</SelectItem>
+          <SelectItem value="Canada">Canada</SelectItem>
         </SelectContent>
       </Select>
     </FormWrapper>

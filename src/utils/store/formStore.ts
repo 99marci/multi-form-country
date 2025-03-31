@@ -1,15 +1,44 @@
+import { defaultInit } from "../default-initializer";
+import { CountryCode, SupportedForms } from "../type";
 import { create } from "zustand/react";
+import { persist } from "zustand/middleware";
 
-type FormState<T> = {
-  formData: Partial<T>;
-  updateForm: (data: Partial<T>) => void;
-  resetForm: () => void;
+type FormState = {
+  formData: SupportedForms[CountryCode] | undefined;
+  updateFormState: (data: Partial<SupportedForms[CountryCode]>) => void;
+  resetFormState: (newCountryName: CountryCode) => void;
 };
 
-export const createFormState = <T>(initialState: T) =>
-  create<FormState<T>>()((set) => ({
-    formData: initialState,
-    updateForm: (data) =>
-      set((state) => ({ formData: { ...state.formData, ...data } })),
-    resetForm: () => set({ formData: initialState }),
-  }));
+export const useCountryFormState = create<
+  FormState,
+  [["zustand/persist", unknown]]
+>(
+  persist(
+    (set) => ({
+      formData: undefined,
+      updateFormState: (data) =>
+        set((state) => ({
+          formData: state.formData
+            ? { ...state.formData, ...data }
+            : (data as SupportedForms[CountryCode]),
+        })),
+      resetFormState: (newCountry: CountryCode) =>
+        set(() => {
+          return {
+            formData: defaultInit[newCountry],
+          };
+        }),
+    }),
+    {
+      name: `storage-form`,
+      partialize: (state) => ({
+        formData: state.formData,
+      }),
+      merge: (persistedState, currentState) => ({
+        ...currentState,
+        ...(persistedState as FormState),
+      }),
+      version: 1,
+    }
+  )
+);
